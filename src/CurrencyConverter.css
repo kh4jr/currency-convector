@@ -1,0 +1,39 @@
+.currency-converter {
+  font-family: Arial, sans-serif;
+  max-width: 400px;
+  margin: 20px auto;
+  padding: 10px;
+  border: 1px solid #e4e4e4c7;
+  border-radius: 5px;
+  background-color: #9e4747;
+}
+
+input {
+  padding: 6px;
+  border: 1px solid #94916c;
+  border-radius: 3px;
+  width: 150px;
+}
+
+select {
+  padding: 10px;
+  border: 1px solid #000000;
+  border-radius: 5px;
+  size: 15px;
+}
+
+h1 {
+  font-size: 20px;
+  text-align: center;
+}
+
+.update-rates-btn {
+  text-align: center;
+  font-size: 24px;
+  margin-bottom: 20px 20px;
+  padding: 10px;
+  border: 2px solid #071a08;
+  border-radius: 8px;
+  background-color: #f0fff0;
+  color: #0d2c0d;
+}
