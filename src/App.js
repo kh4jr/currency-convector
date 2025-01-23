@@ -3,28 +3,28 @@ import './App.css';
 import CurrencyConverter from './CurrencyConverter';
 import CurrencyChart from './CurrencyChart';
 
-// Створення контекстів для теми та мови
+// Creating contexts for theme and language
 export const ThemeContext = createContext('light');
 export const LanguageContext = createContext('ua');
 
 function App() {
-  const [theme, setTheme] = useState('light'); // 'light' або 'dark'
-  const [language, setLanguage] = useState('ua'); // Поточна мова
-  const [baseCurrency, setBaseCurrency] = useState('USD'); // Основна валюта
-  const [targetCurrency, setTargetCurrency] = useState('EUR'); // Валюта конвертації
-  const apiKey = 'ce3dbd40db2a799bf0217e52d6500dae'; // Ваш API ключ
+  const [theme, setTheme] = useState('light'); // Current theme ('light' or 'dark')
+  const [language, setLanguage] = useState('ua'); // Current language
+  const [baseCurrency, setBaseCurrency] = useState('USD'); // Base currency for conversion
+  const [targetCurrency, setTargetCurrency] = useState('EUR'); // Target currency for conversion
+  const apiKey = 'ce3dbd40db2a799bf0217e52d6500dae'; // API key for accessing exchange rate data
 
-  // Функція для зміни теми
+  // Function to toggle the theme
   const toggleTheme = () => {
     setTheme((prevTheme) => (prevTheme === 'light' ? 'dark' : 'light'));
   };
 
-  // Функція для зміни мови
+  // Function to change the language
   const changeLanguage = (newLanguage) => {
     setLanguage(newLanguage);
   };
 
-  // Додавання класу теми до <body>
+  // Add theme class to <body>
   useEffect(() => {
     document.body.className = theme;
   }, [theme]);
@@ -47,11 +47,11 @@ function App() {
               <option value="en">Українська</option>
               <option value="ua">English</option>
               <option value="pl">Bober Kurwa</option>
-              {/* Додаткові мови */}
+              {}
             </select>
           </header>
 
-          {/* Основні компоненти */}
+          {}
           <main>
             <CurrencyConverter
               baseCurrency={baseCurrency}

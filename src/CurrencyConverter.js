@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import './App.css'; // Якщо файл стилів називається App.css
+import './App.css';
 import '../src/CurrencyConverter.css'
 
 
-// Замініть цим своїм ключем API
+// API key
 const API_KEY = "ce3dbd40db2a799bf0217e52d6500dae";
 
 const CurrencyConverter = () => {
@@ -13,7 +13,7 @@ const CurrencyConverter = () => {
   const [inputCurrency, setInputCurrency] = useState("USD");
   const [outputCurrency, setOutputCurrency] = useState("EUR");
 
-  // Завантаження курсів з Local Storage
+  // Load exchange rates from Local Storage
   const loadRatesFromLocalStorage = () => {
     const data = localStorage.getItem("currencyRates");
     if (!data) return null;
@@ -28,7 +28,8 @@ const CurrencyConverter = () => {
     return parsedData.rates;
   };
 
-  // Збереження курсів у Local Storage
+
+  // Save exchange rates to Local Storage
   const saveRatesToLocalStorage = (rates) => {
     const data = {
       rates,
@@ -37,7 +38,7 @@ const CurrencyConverter = () => {
     localStorage.setItem("currencyRates", JSON.stringify(data));
   };
 
-  // Функція отримання курсів валют
+  // Fetch exchange rates from the API
   const fetchCurrencyRates = async () => {
     try {
       const response = await fetch(
@@ -58,14 +59,15 @@ const CurrencyConverter = () => {
     }
   };
 
-  // Оновлення курсів
+  // Update exchange rates
   const updateRates = async () => {
     const newRates = await fetchCurrencyRates();
     setRates(newRates);
     saveRatesToLocalStorage(newRates);
   };
 
-  // Ініціалізація компоненту
+
+// Component initialization
   useEffect(() => {
     const savedRates = loadRatesFromLocalStorage();
     if (savedRates) {
@@ -74,13 +76,13 @@ const CurrencyConverter = () => {
       updateRates();
     }
 
-    // Запускаємо автоматичне оновлення курсів кожні 4 години
+     // Automatically update rates every 4 hours
     const fourHours = 4 * 60 * 60 * 1000;
     const interval = setInterval(updateRates, fourHours);
     return () => clearInterval(interval);
   }, []);
 
-  // Обчислення результату
+  // Calculate the conversion result
   useEffect(() => {
     if (rates) {
       const rateInputToUSD = rates[`USD${inputCurrency}`] || 1;
@@ -90,7 +92,7 @@ const CurrencyConverter = () => {
     }
   }, [inputAmount, inputCurrency, outputCurrency, rates]);
 
-  // Збереження історії конвертацій
+  // Save conversion history to Local Storage
   const saveConversionHistory = (inputAmount, inputCurrency, outputAmount, outputCurrency) => {
     const history = JSON.parse(localStorage.getItem("conversionHistory")) || [];
     const newEntry = {
@@ -104,18 +106,20 @@ const CurrencyConverter = () => {
     localStorage.setItem("conversionHistory", JSON.stringify(updatedHistory));
   };
 
-  // Збереження конвертації при зміні результату
+  // Save conversion when result changes
   useEffect(() => {
     if (inputAmount > 0) {
       saveConversionHistory(inputAmount, inputCurrency, outputAmount, outputCurrency);
     }
   }, [outputAmount]);
 
-  // Завантаження історії
+  // Load conversion history from Local Storage
   const loadConversionHistory = () => {
     return JSON.parse(localStorage.getItem("conversionHistory")) || [];
   };
 
+
+  // Render the currency selector options
   return (
     <div style={{ textAlign: "center", padding: "20px" }}>
       <h1>Currency Converter</h1>
@@ -132,7 +136,7 @@ const CurrencyConverter = () => {
           {Object.keys(rates)
             .filter((key) => key.startsWith("USD"))
             .map((key) => {
-              const currency = key.replace("USD", ""); // Витягуємо валюту з ключа
+              const currency = key.replace("USD", ""); // Extract currency code from the key
               return (
                 <option key={currency} value={currency}>
                   {currency}
@@ -150,7 +154,7 @@ const CurrencyConverter = () => {
           {Object.keys(rates)
             .filter((key) => key.startsWith("USD"))
             .map((key) => {
-              const currency = key.replace("USD", ""); // Витягуємо валюту з ключа
+              const currency = key.replace("USD", ""); 
               return (
                 <option key={currency} value={currency}>
                   {currency}

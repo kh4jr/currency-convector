@@ -16,7 +16,7 @@ const CurrencyChart = ({ baseCurrency, targetCurrency, apiKey }) => {
 
       const today = new Date();
       const startDate = new Date(today);
-      startDate.setDate(today.getDate() - 30); // Last 30 days
+      startDate.setDate(today.getDate() - 30); 
 
       const formattedToday = today.toISOString().split('T')[0];
       const formattedStartDate = startDate.toISOString().split('T')[0];
