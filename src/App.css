@@ -1,98 +1,198 @@
-/* Загальний стиль для body */
+:root {
+  --background-color: #f4f4f4;
+  --text-color: #333;
+  --button-background: #007bff;
+  --button-text: #fff;
+  --primary-color: #007bff;
+  --secondary-color: #6c757d;
+  --border-color: #ddd;
+}
+
+[data-theme="dark"] {
+  --background-color: #121212;
+  --text-color: #eee;
+  --button-background: #1e88e5;
+  --button-text: #fff;
+  --primary-color: #1e88e5;
+  --secondary-color: #5a6268;
+  --border-color: #444;
+}
+
 body {
-  font-family: Arial, sans-serif;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  transition: background-color 0.3s, color 0.3s;
+  font-family: 'Inter', sans-serif;
   margin: 0;
   padding: 0;
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background-color: #a8a8a8;
-  color: #333;
 }
 
-/* Контейнер всієї програми */
 .app-container {
-  width: 90%;
-  max-width: 800px;
-  background-color: #ffffff;
-  border: 2px solid #e0e0e0;
+  width: 100vw;
+  max-width: 1200px;
+  background-color: var(--background-color);
+  border: 1px solid var(--border-color);
   border-radius: 10px;
   padding: 20px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-/* Стиль заголовка */
-h1 {
-  text-align: center;
-  font-size: 24px;
-  margin-bottom: 20px;
-  padding: 10px;
-  border: 2px solid #4CAF50;
-  border-radius: 8px;
-  background-color: #f0fff0;
-  color: #2d7a2d;
-}
-
-/* Поле вводу та кнопку об’єднати в рамку */
-.input-container {
+  margin: 20px auto;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+
+.content-wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.top-container {
+  width: 100%;
+  padding: 20px;
+  background-color: transparent;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.head-controls {
+  display: flex;
   align-items: center;
   gap: 10px;
-  padding: 15px;
-  border: 2px solid #00bcd4;
-  border-radius: 10px;
-  background-color: #e0f7fa;
+}
+
+.theme-toggle-btn,
+.language-select {
+  margin: 0;
+}
+
+.middle-container,
+.second-container,
+.history-section,
+.table-section {
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+  padding: 20px;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  background-color: var(--background-color);
   margin-bottom: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  box-sizing: border-box;
 }
 
-/* Селектори */
-select {
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 16px;
+.middle-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 100%;
+  padding: 20px;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  background-color: var(--background-color);
+  margin-bottom: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  box-sizing: border-box;
 }
 
-/* Поле вводу */
+.second-container {
+  width: 100%;
+  max-width: 1200px;
+  padding: 20px;
+  flex-direction: column;
+  background-color: var(--background-color);
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+  text-align: center;
+  font-size: 44px;
+  font-weight: bold;
+  margin: 20px 0;
+  padding: 15px;
+  color: var(--primary-color);
+  border-bottom: 2px dashed var(--primary-color);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.input-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  padding: 20px 30px;
+  border: 1px solid var(--primary-color);
+  border-radius: 8px;
+  background-color: rgba(0, 123, 255, 0.1);
+  margin-bottom: 15px;
+  width: 50%; 
+  margin-inline: auto;
+  box-sizing: border-box;
+  transition: all 0.3s ease-in-out;
+}
+
+.input-container:last-child {
+  margin-bottom: 10px;
+}
+
+.middle-container > div {
+  display: flex;
+  justify-content: space-between;
+
+}
+
+select,
 input[type="number"] {
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  padding: 10px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
   font-size: 16px;
+  transition: all 0.3s ease-in-out;
+}
+
+input[type="number"] {
   width: 80px;
   text-align: center;
 }
 
-/* Кнопка оновлення */
-button {
+button,
+.theme-toggle-btn,
+.update-rates-btn {
   padding: 10px 20px;
   border: none;
-  border-radius: 5px;
-  background-color: #4CAF50;
-  color: #ffffff;
+  border-radius: 8px;
+  background-color: var(--button-background);
+  color: var(--button-text);
   cursor: pointer;
   font-size: 16px;
+  margin-inline: auto;
+  transition: background-color 0.3s, box-shadow 0.3s;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
 }
 
-button:hover {
-  background-color: #45a049;
+button:hover,
+.theme-toggle-btn:hover,
+.update-rates-btn:hover {
+  background-color: rgba(0, 123, 255, 0.8);
 }
 
-/* Секція "Історія конверсій" */
-.history-section {
-  padding: 10px;
-  border: 1px solid #ff9800;
-  border-radius: 5px;
-  background-color: #756d5f;
-  margin-bottom: 20px;
-}
-
-.history-section h2 {
-  text-align: center;
+.history-section h2,
+.table-section h2 {
+  text-align: left;
   font-size: 20px;
-  color: #e65100;
+  color: var(--primary-color);
+  margin-bottom: 10px;
 }
 
 .history-section ul {
@@ -104,45 +204,61 @@ button:hover {
   margin-bottom: 8px;
 }
 
-/* Таблиця курсів валют */
-.table-section {
-  padding: 15px;
-  border: 2px solid #2196F3;
-  border-radius: 10px;
-  background-color: #E3F2FD;
-}
-
-.table-section h2 {
-  text-align: left;
-  font-size: 12px;
-  color: #1a5fc5;
-}
-
 table {
   width: 100%;
+  table-layout: fixed;
   border-collapse: collapse;
 }
 
 table th,
 table td {
-  border: 1px solid #ddd;
+  border: 1px solid var(--border-color);
   padding: 8px;
   text-align: center;
+  white-space: nowrap; /* Prevent text wrapping */
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 table th {
-  background-color: #2196F3;
-  color: white;
+  background-color: var(--primary-color);
+  color: var(--button-text);
 }
 
-/* Адаптивний дизайн */
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.language-select,
+.currency-select-from,
+.currency-select-to {
+  padding: 10px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 16px;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  transition: all 0.3s ease-in-out;
+}
+
 @media (max-width: 768px) {
   .input-container {
     flex-direction: column;
-    gap: 5px;
+    gap: 4px;
   }
 
   button {
     width: 100%;
   }
+}
+
+.middle-container, .bottom-container {
+  border: 1px solid var(--border-color);
+  background-color: var(--background-color);
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }

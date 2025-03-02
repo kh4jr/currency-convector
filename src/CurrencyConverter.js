@@ -1,17 +1,40 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, createContext } from "react";
 import './App.css';
-import '../src/CurrencyConverter.css'
+import CurrencyChart from './CurrencyChart';
 
+// Creating contexts for theme and language
+export const ThemeContext = createContext('light');
+export const LanguageContext = createContext('ua');
 
-// API key
 const API_KEY = "ce3dbd40db2a799bf0217e52d6500dae";
 
 const CurrencyConverter = () => {
+  // State variables
   const [rates, setRates] = useState({});
   const [inputAmount, setInputAmount] = useState(0);
   const [outputAmount, setOutputAmount] = useState(0);
   const [inputCurrency, setInputCurrency] = useState("USD");
   const [outputCurrency, setOutputCurrency] = useState("EUR");
+  const [theme, setTheme] = useState("light");
+  const [language, setLanguage] = useState('ua'); // Current language
+  const [baseCurrency, setBaseCurrency] = useState('USD'); // Base currency for conversion
+  const [targetCurrency, setTargetCurrency] = useState('EUR'); // Target currency for conversion
+  const apiKey = 'ce3dbd40db2a799bf0217e52d6500dae'; // API key for accessing exchange rate data
+
+  // Update the theme attribute on the document element
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
+  }, [theme]);
+
+  // Toggle between light and dark themes
+  const toggleTheme = () => {
+    setTheme(theme === "light" ? "dark" : "light");
+  };
+
+  // Function to change the language
+  const changeLanguage = (newLanguage) => {
+    setLanguage(newLanguage);
+  };
 
   // Load exchange rates from Local Storage
   const loadRatesFromLocalStorage = () => {
@@ -27,7 +50,6 @@ const CurrencyConverter = () => {
 
     return parsedData.rates;
   };
-
 
   // Save exchange rates to Local Storage
   const saveRatesToLocalStorage = (rates) => {
@@ -66,8 +88,7 @@ const CurrencyConverter = () => {
     saveRatesToLocalStorage(newRates);
   };
 
-
-// Component initialization
+  // Component initialization
   useEffect(() => {
     const savedRates = loadRatesFromLocalStorage();
     if (savedRates) {
@@ -76,7 +97,7 @@ const CurrencyConverter = () => {
       updateRates();
     }
 
-     // Automatically update rates every 4 hours
+    // Automatically update rates every 4 hours
     const fourHours = 4 * 60 * 60 * 1000;
     const interval = setInterval(updateRates, fourHours);
     return () => clearInterval(interval);
@@ -118,88 +139,133 @@ const CurrencyConverter = () => {
     return JSON.parse(localStorage.getItem("conversionHistory")) || [];
   };
 
-
   // Render the currency selector options
   return (
-    <div style={{ textAlign: "center", padding: "20px" }}>
-      <h1>Currency Converter</h1>
-      <div>
-        <input
-          type="number"
-          value={inputAmount}
-          onChange={(e) => setInputAmount(e.target.value)}
-        />
-        <select
-          value={inputCurrency}
-          onChange={(e) => setInputCurrency(e.target.value)}
-        >
-          {Object.keys(rates)
-            .filter((key) => key.startsWith("USD"))
-            .map((key) => {
-              const currency = key.replace("USD", ""); // Extract currency code from the key
-              return (
-                <option key={currency} value={currency}>
-                  {currency}
-                </option>
-              );
-            })}
-        </select>
-      </div>
-      <div>
-        <input type="number" value={outputAmount} readOnly />
-        <select
-          value={outputCurrency}
-          onChange={(e) => setOutputCurrency(e.target.value)}
-        >
-          {Object.keys(rates)
-            .filter((key) => key.startsWith("USD"))
-            .map((key) => {
-              const currency = key.replace("USD", ""); 
-              return (
-                <option key={currency} value={currency}>
-                  {currency}
-                </option>
-              );
-            })}
-        </select>
-      </div>
-      <button class="update-rates-btn" onClick={updateRates}>Update Rates</button>
-      <h3>Conversion History</h3>
-      <ul>
-        {loadConversionHistory().map((entry, index) => (
-          <li key={index}>
-            {entry.date}: {entry.inputAmount} {entry.inputCurrency} →{" "}
-            {entry.outputAmount} {entry.outputCurrency}
-          </li>
-        ))}
-      </ul>
-      <h3>Popular Exchange Rates</h3>
-<table style={{ margin: "20px auto", borderCollapse: "collapse" }}>
-  <thead>
-    <tr>
-      <th style={{ border: "1px solid black", padding: "10px" }}>From</th>
-      <th style={{ border: "1px solid black", padding: "10px" }}>To</th>
-      <th style={{ border: "1px solid black", padding: "10px" }}>Rate</th>
-    </tr>
-  </thead>
-  <tbody>
-    {["EUR", "GBP", "JPY"].map((currency) => (
-      <tr key={currency}>
-        <td style={{ border: "1px solid black", padding: "10px" }}>USD</td>
-        <td style={{ border: "1px solid black", padding: "10px" }}>
-          {currency}
-        </td>
-        <td style={{ border: "1px solid black", padding: "10px" }}>
-          {rates[`USD${currency}`]?.toFixed(2) || "N/A"}
-        </td>
-      </tr>
-    ))}
-  </tbody>
-</table>
-
-    </div>
+    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+      <LanguageContext.Provider value={{ language, changeLanguage }}>
+        <div className={`app-container ${theme}`}>
+          <div className="content-wrapper">
+            <div className="top-container">
+              <header>
+                <div className="head-controls">
+                  <button className="theme-toggle-btn" onClick={toggleTheme}>
+                    Switch to {theme === "light" ? "Dark" : "Light"} Theme
+                  </button>
+                  <select className="language-select"
+                    onChange={(e) => changeLanguage(e.target.value)}
+                    value={language}
+                  >
+                    <option value="en">Українська</option>
+                    <option value="ua">English</option>
+                    <option value="pl">Polski</option>
+                  </select>
+                </div>
+              </header>
+            </div>
+            <div className="middle-container">
+              <div className="second-container">
+                <h1>Currency Converter</h1>
+                <div className="input-container">
+                  <input
+                    type="number"
+                    value={inputAmount}
+                    onChange={(e) => setInputAmount(e.target.value)}
+                  />
+                  <select
+                    value={inputCurrency}
+                    onChange={(e) => setInputCurrency(e.target.value)}
+                  >
+                    {Object.keys(rates)
+                      .filter((key) => key.startsWith("USD"))
+                      .map((key) => {
+                        const currency = key.replace("USD", ""); // Extract currency code from the key
+                        return (
+                          <option key={currency} value={currency}>
+                            {currency}
+                          </option>
+                        );
+                      })}
+                  </select>
+                </div>
+                <div className="input-container">
+                  <input type="number" value={outputAmount} readOnly />
+                  <select
+                    value={outputCurrency}
+                    onChange={(e) => setOutputCurrency(e.target.value)}
+                  >
+                    {Object.keys(rates)
+                      .filter((key) => key.startsWith("USD"))
+                      .map((key) => {
+                        const currency = key.replace("USD", ""); 
+                        return (
+                          <option key={currency} value={currency}>
+                            {currency}
+                          </option>
+                        );
+                      })}
+                  </select>
+                </div>
+                <button className="update-rates-btn" onClick={updateRates}>Update Rates</button>
+              </div>
+            </div>
+            <div className="bottom-container">
+              <div className="history-section">
+                <h2>Conversion History</h2>
+                <ul>
+                  {loadConversionHistory().map((entry, index) => (
+                    <li key={index}>
+                      {entry.date}: {entry.inputAmount} {entry.inputCurrency} →{" "}
+                      {entry.outputAmount} {entry.outputCurrency}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div className="table-section">
+                <h2>Popular Exchange Rates</h2>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>From</th>
+                      <th>To</th>
+                      <th>Rate</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {["EUR", "GBP", "PLN"].map((currency) => (
+                      <tr key={currency}>
+                        <td>
+                          <select className="currency-select-from">
+                            <option value="USD">USD</option>
+                            <option value="PLN">PLN</option>
+                            <option value="UAH">UAH</option>
+                            <option value="JPN">JPN</option>
+                          </select>
+                        </td>
+                        <td>
+                          <select className="currency-select-to">
+                            <option value={currency}>{currency}</option>
+                            <option value="USD">USD</option>
+                            <option value="EUR">EUR</option>
+                            <option value="GBP">GBP</option>
+                          </select>
+                        </td>
+                        <td>{rates[`USD${currency}`]?.toFixed(2) || "N/A"}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <CurrencyChart
+                baseCurrency={baseCurrency}
+                targetCurrency={targetCurrency}
+                apiKey={apiKey}
+              />
+            </div>
+          </div>
+        </div>
+      </LanguageContext.Provider>
+    </ThemeContext.Provider>
   );
-  
 };
 
 export default CurrencyConverter;
